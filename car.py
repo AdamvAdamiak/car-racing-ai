@@ -1,13 +1,14 @@
 import pygame
 import math
 
+
 class Car:
     def __init__(self, x, y):
         self.x = x
         self.y = y
         self.vel = 0
         self.angle = 0
-        # self.img = pygame.image.load("assets/car.png")
+        self.img = pygame.image.load("assets/car.png")
         self.front_x = self.x + 16 + 16 * math.sin(math.radians(self.angle))
         self.back_x = self.x + 16 - 16 * math.sin(math.radians(self.angle))
         self.front_y = self.y + 16 + 16 * math.cos(math.radians(self.angle))
@@ -37,3 +38,6 @@ class Car:
             self.angle += 2 + self.vel*0.3
             if self.angle > 360:
                 self.angle -= 360
+
+    def get_xy(self):
+        print(self.x, self.y)
