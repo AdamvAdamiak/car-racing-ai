@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pygame
+from sqlalchemy import true
+from PIL import Image
 
 
 def circle_function(x, r):
@@ -7,27 +10,26 @@ def circle_function(x, r):
 
 
 class Road:
-    def __init__(self, r_inline, r_outline) -> None:
+    def __init__(self) -> None:
 
-        if r_inline > r_outline:
-            print('Error, r_inline must be higher than r_outline')
-            exit()
+        self.img = Image.open("assets/road.jpg")
 
-        self.r_inline = r_inline
-        self.r_outline = r_outline
+    def draw_road(self, screen):
+        img = pygame.image.load("assets/road.jpg")
 
-        self.x_inline = np.linspace(-r_inline, r_inline, 1000)
-        self.y_inline = circle_function(self.x_inline, self.r_inline)
+        self.screen = screen
+        self.screen.blit(img, (0, 0))
 
-        self.x_outline = np.linspace(-r_outline, r_outline, 1000)
-        self.y_outline = circle_function(self.x_outline, self.r_outline)
-
-    def draw_road(self):
-
-        plt.plot(self.x_inline, self.y_inline, 'b')
-        plt.plot(self.x_inline, -self.y_inline, 'b')
-
-        plt.plot(self.x_outline, self.y_outline, 'b')
-        plt.plot(self.x_outline, -self.y_outline, 'b')
-
-        plt.show()
+    def collide(self, car):
+        # Getting the pixel in the front and back of the car, then looking if it's red or green pixel and if true
+        # return True
+        front_x, back_x, front_y, back_y = car.get_ends()
+        r, g, b, *a = self.img.getpixel((front_x, front_y))
+        r2, g2, b2, *a = self.img.getpixel((back_x, back_y))
+        #print(self.track.getpixel((front_x, front_y)))
+        if (r > 155 and b < 100) or (r2 > 155 and b2 < 100) or (g > 155 and b < 100) or (g2 > 155 and b < 100):
+            #print("Collided: , "+ str(r) + "  " + str(g) + "  " + str(b))
+            if r < 50 and b < 50 and g < 50:
+                return False
+            return True
+        #print("Not collided")
